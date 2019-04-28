@@ -108,7 +108,7 @@ Les valeurs des paramètres qui seront utilisés pour l'évaluation de différen
 
 Il était demandé de construire des arbres binomial d'échéance 6 mois et 2 ans avec 4 et 100 périodes, donc nous devrons construire 4 arbres au total. Nous devions utiliser ces arbres dans le but de ressortir plusieurs caractéristiques d'option de vente ($K=90$) et d'option d'achat ($K=120$).
 
-À l'aide des formules développées à la question 1, il est possible de dériver les paramètres $u$ et $d$.
+À l'aide des formules développées à la question 1, il est possible de dériver les paramètres $u$ et $d$, représentant le facteur de hausse et de diminution du sous-jacent pendant la période de longueur $h$.
 
 $$
 u = e^{rh+\sigma\sqrt{h}} \quad \text{et} \quad d = e^{rh-\sigma\sqrt{h}}
@@ -144,8 +144,9 @@ Il est observer que pour un propriétaire d'une option d'achat, le $\Delta$ sera
 Une fois ces paramètres déterminés, on peut répliquer la valeur à l'échéance de l'option en achetant ou en vendant une partie du sous-jacent correspondant au $\Delta$ et en empruntant ou en prêtant B
 
 $$
-\theta = \Delta\times S + B
+\theta = \Delta\times S + B = e^{-rh}(p^*\theta_u+(1-p^*)\theta_d)
 $$
+Où $\theta$ est la valeur de l'option à un noeuds quelconque.
 
 Pour démontrer la valeur de nos paramètres réplicatifs, l'exemple du calcul sera effectué pour l'option d'achat à troisième période à l'embranchement suppérieur, 
 
@@ -218,28 +219,52 @@ On constate donc que le delta est négatif, cela s'explique par le fait qu'il y 
 
 Donc étant donné que le delta est négatif, pour répliquer l'option de vente, il faut donc se procurer une position courte dans le sous-jacent. Pour y arriver, il faut prêter un montant  B$\$$.
 
-Les prochaines figures correspondes à des options d'achat et ont 4 périodes chacunes, mais avec des échéances de T=0.5 ou T=2 respectivement. 
+##### Option d'achat : modèle à 4 périodes
+
+```{r, echo = FALSE}
+call05 <- binomopt(s=100, k=120, v=sd, r=Rfree_est, tt=0.5, d=0, nstep=4, american=F, putopt=F, 
+                  returntrees=T)
+call2 <- binomopt(s=100, k=120, v=sd, r=Rfree_est, tt=2, d=0, nstep=4, american=T, putopt=F, 
+                  returntrees=T)
+```
+
+Les prochaines figures correspondes à des options d'achat et ont 4 périodes chacunes, mais avec des échéances de $T=0.5$ ou $T=2$ respectivement. 
+
 
 
 ![](Call05.png)
 
 ![](Call2.png)
 
-On peut en déduire que plus le temps est grand avant la date d'échéance, plus les probabilités qu'il y ait une valeur à l'échéance non nulle d'une option achat sont grandes. C'est notament le cas en raison du taux sans risque plus grand que le taux de dividende ($r_f$ $\ge$ $\delta$), donc l'espérance de la hausse de prix du sous-jacent est positive au fil du temps.
+On peut en déduire que plus le temps est grand avant la date d'échéance, plus les probabilités qu'il y ait une valeur à l'échéance non nulle d'une option achat sont grandes. C'est notament le cas en raison du taux sans risque plus grand que le taux de dividende ($r_f$ $\ge$ $\delta$), donc l'espérance de la hausse de prix du sous-jacent est positive au fil du temps. Les prix pour les options d'achat sont présentés dans le tableau suivant.
 
-Les prochaines figures correspondes à des options de vente et ont 4 périodes chacunes, mais avec des échéances de T=0.5 ou T=2 respectivement. 
+|Échéance|Prix |
+|:---:|:----:|
+|6 mois|`r call05$price`\$|
+|2 ans|`r call2$price`\$|
+
+##### Option de vente : modèle à 4 périodes
+
+```{r, echo=FALSE}
+put05 <- binomopt(s=100, k=90, v=sd, r=Rfree_est, tt=0.5, d=0, nstep=4, american=F, putopt=T, 
+         returntrees=T)
+put2 <- binomopt(s=100, k=90, v=sd, r=Rfree_est, tt=2, d=0, nstep=4, american=F, putopt=T, 
+                  returntrees=T)
+```
+
+Les prochaines figures correspondes à des options de vente et ont 4 périodes chacunes, mais avec des échéances de $T=0.5$ ou $T=2$ respectivement. 
 
 ![](put05.png)
 ![](put2.png)
 
-À l'invserse des options d'achat, on peut en déduire que plus le temps est grand avant la date d'échéance, plus les probabilités qu'il y ait une valeur à l'échéance non nulle d'une option achat sont petites. 
+À l'invserse des options d'achat, on peut en déduire que plus le temps est grand avant la date d'échéance, plus les probabilités qu'il y ait une valeur à l'échéance non nulle d'une option achat sont petites. Les prix pour les options de vente sont présentés dans le tableau suivant. 
 
+|Échéance|Prix |
+|:---:|:----:|
+|6 mois|`r put05$price`\$|
+|2 ans|`r put2$price`\$|
 
-
-Maintenant, les mêmes caractérisques sont maintenues, mais au lieu de faire le modèle à 4 périodes, il y aura 100 périodes. Le prix des options se rapprochent de plus en plus du prix calculé à l'aide du modèle continue de *Black-Scholes* qui sera présenté plus loin dans le rapport. 
-
-
-
+##### Option d'achat : modèle à 100 périodes
 
 ```{r, echo=FALSE, warning=FALSE}
 
@@ -252,7 +277,14 @@ call2 <- binomopt(s=100, k=120, v=sd, r=Rfree_est, tt=2, d=0, nstep=100, america
 prix_call2 = call2$price
 ```
 
-\newpage
+Maintenant, les mêmes caractérisques sont maintenues, mais au lieu de faire le modèle à 4 périodes, il y aura 100 périodes. Le prix des options se rapprochent de plus en plus du prix calculé à l'aide du modèle continue de *Black-Scholes* qui sera présenté plus loin dans le rapport. Le tableau ci-dessous présente les prix initiaux pour les options d'achat ainsi que la composition initiale du portefeuille réplicatif.
+
+|Échéance|Prix |$\Delta_0$|$B_0$|
+|:---:|:----:|:----:|:----:|
+|6 mois|`r call05$price`\$|`r call05$deltatree[1,1]`|`r call05$bondtree[1,1]`\$|
+|2 ans|`r call2$price`\$|`r call2$deltatree[1,1]`|`r call2$bondtree[1,1]`\$|
+
+
 
 ![](hist_Call05.png)
 
@@ -262,15 +294,14 @@ prix_call2 = call2$price
 
 \newpage
 
-Concernant les valeurs à l'échance, les conclusions sont les mêmes que présentées précédement, il y a de plus en de valeur à l'échance non nulles quand le temps d'échéance augmente pour un option d'achat. En comparant, on peut observer que le prix initial de l'option d'achat à T = 0.5 est de `r prix_call05` et que le prix initial de l'option d'achat à T = 2 est de `r prix_call2`. Donc, pour des options d'achat avec les mêmes paramètres, plus le temps d'ici l'échéance est grand, plus le prix de l'option sera élevé.
+Concernant les valeurs à l'échance, les conclusions sont les mêmes que présentées précédement, il y a de plus en de valeur à l'échance non nulles quand le temps d'échéance augmente pour un option d'achat. En comparant, on peut observer que le prix initial de l'option d'achat à T = 0.5 est de `r prix_call05`\$ et que le prix initial de l'option d'achat à T = 2 est de `r prix_call2`\$. Donc, pour des options d'achat avec les mêmes paramètres, plus le temps d'ici l'échéance est grand, plus le prix de l'option sera élevé.
 
-Il est également pertinent d'observer l'histogramme des deltas et des B au fil des périodes, plus les périodes défilent, plus il est possible de déterminer à l'avance si l'option sera exercée ou non. Pour illustrer ce fait, il sera établi, tout en conservant les paramètres précédents, que si à 25 périodes de l'échéance de l'option le prix du sous-jacent est de 90$\$$ alors que le prix d'exercice est de 120$\$$, alors les probalités sont très faible d'exercer l'option, c'est pourquoi il y a une grande masse de deltas et de B situés près de 0, car l'option est réputée être "Out of the money". À l'inverse, si à la même période, le sous-jacent est de 160$\$$, l'option est réputée être "In the money" et aura de très fortes chances d'être exercée, cela explique donc pourquoi il y a un grande masse près de 1 pour les deltas et près de -120$\$$.
+Il est également pertinent d'observer l'histogramme des deltas et des B au fil des périodes, plus les périodes défilent, plus il est possible de déterminer à l'avance si l'option sera exercée ou non. Pour illustrer ce fait, il sera établi, tout en conservant les paramètres précédents, que si à 25 périodes de l'échéance de l'option le prix du sous-jacent est de 90$\$$ et que le prix d'exercice est de 120$\$$, alors les probabilités d'exercer l'option sont très faibles, c'est pourquoi il y a une grande masse de deltas et de B situés près de 0, car l'option est réputée être "Out of the money". À l'inverse, si à la même période, le sous-jacent est de 160$\$$, l'option est réputée être "In the money" et aura de très fortes chances d'être exercées, cela explique donc pourquoi il y a un grande masse près de 1 pour les deltas et près de -120$\$$.
 
 Cependant, à la période 25, si le prix du sous-jacent est de 120$, l'option sera réputée "At the money", c'est donc pourquoi il y a également des masses près de 0.5 pour les deltas et croissant à partir de 20 pour les B. Car les scénarios où l'option soit exercée ou non sont tous les deux probables d'ici l'échéance.
 
 
-\newpage
-
+##### Option de vente : modèle à 100 périodes
 
 ```{r, echo=FALSE, warning=FALSE}
 put05 <- binomopt(s=100, k=90, v=sd, r=Rfree_est, tt=0.5, d=0, nstep=100, american=F, putopt=T, 
@@ -286,6 +317,15 @@ prix_put2 = put2$price
 
 ```
 
+Le tableau ci-dessous présente les prix initiaux pour les options de vente pour le modèle à 100 périodes. Comme pour les options d'achat, il sera démontré plus loin à la question 5 que le prix d'une option de vente dans un modèle binomial à 100 périodes tend vers le prix prédit par le modèle *Black-Scholes*. De plus, la composition initiale du portefeuille réplicatif est présentée.
+
+|Échéance|Prix |$\Delta_0$|$B_0$|
+|:---:|:----:|:----:|:----:|
+|6 mois|`r put05$price`\$|`r put05$deltatree[1,1]`|`r put05$bondtree[1,1]`\$|
+|2 ans|`r put2$price`\$|`r put2$deltatree[1,1]`|`r put2$bondtree[1,1]`\$|
+
+
+
 
 ![](hist_put05.png)
 
@@ -296,7 +336,7 @@ prix_put2 = put2$price
 \newpage
 
 
-Concernant les valeurs à l'échance, les conclusions sont les mêmes que présentées précédement pour les options de ventes, il y a de moins en de moins de valeur à l'échance non nulles quand le temps d'échéance augmente pour une option de vente. On observe que le prix initial de l'option de vente à T = 0.5 est de `r prix_put05` et le prix initial de l'option de vente à T = 2 est de `r prix_put2`. Donc, pour des options d'achat de même paramètres, moins le temps d'ici l'échéance est grand, plus la valeur de l'option sera grande.
+Concernant les valeurs à l'échance, les conclusions sont les mêmes que présentées précédement pour les options de ventes, il y a de moins en de moins de valeur à l'échance non nulles quand le temps d'échéance augmente pour une option de vente. On observe que le prix initial de l'option de vente à T = 0.5 est de `r prix_put05`\$ et le prix initial de l'option de vente à T = 2 est de `r prix_put2`\$. Donc, pour des options d'achat de même paramètres, moins le temps d'ici l'échéance est grand, plus la valeur de l'option sera grande.
 
 Le constat est semblable à celui des options d'achats, mais avec des paramètres réplicatifs inversés. donc les deltas tendent vers 0 ou -1 plus les périodes avancent, et le paramètres B tend vers 0 ou 80$\$$.
 
