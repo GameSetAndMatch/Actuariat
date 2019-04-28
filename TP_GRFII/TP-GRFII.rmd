@@ -35,7 +35,7 @@ output: pdf_document
 library(derivmkts)
 #setwd("C:/Users/matis/Desktop/ACT-2011 GRF 2/Actuariat/TP_GRF2")
 
-setwd("C:/Users/Olivier/Desktop/Développement/Actuariat/2019/Session_H19/GRFII/TP_GRFII")
+#setwd("C:/Users/Olivier/Desktop/Développement/Actuariat/2019/Session_H19/GRFII/TP_GRFII")
 ```
 # Question 1
 ```{r, echo=FALSE, warning=FALSE}
@@ -75,7 +75,7 @@ Ainsi, il est nécessaire d'approximer les paramètres de volatilité et de taux
 Tout d'abord, l'équation suivante est employée pour déterminer les rendements logarithmiques pour chaque période de $h=\frac{1}{12}$ d'année.
 
 $$
-r_{t,t+h} = ln(\frac{S_{t+h}}{S_t}) \qquad (1)
+r_{t,t+h} = ln\left(\frac{S_{t+h}}{S_t}\right) \qquad (1)
 $$
 
 Ensuite, l'utilisation de (1) est utilisée dans l'équation ci-dessous pour déterminer l'écart-type annuelle des données mensuelles historiques. Dans cette équation, il y a une division par $\sqrt{h}$ afin de s'assurer que la volatilité calculée soit sur base annuelle.
@@ -88,7 +88,7 @@ $$
 En utilisant les taux de rendement historiques sur les bons du trésor un 1 an du Canada. Nous avons utilisés les taux de rendement effectif annuel des 5 dernières années. Ces données sont disponibles pour chaque mois sur le site de la Banque du Canada. La formule suivante a été utilisée pour estimer la force d'interêt sans risque annuelle. 
 
 $$
-r_f = ln\left(1 + \sum_{i=0}^{n-1}\frac{r_{f,i}/100}{n}\right)
+r_f = ln\left(1 + \sum_{i=0}^{n-1}\frac{r_{f,i}}{n}\right)
 $$
 Où, $n=60$ et $r_{f,i}$ est le taux de rendement effectif annuel pour un bon du trésor 1 an pour le mois $i$.
 
@@ -113,11 +113,11 @@ Il était demandé de construire des arbres binomial d'échéance 6 mois et 2 an
 $$
 u = e^{rh+\sigma\sqrt{h}} \quad \text{et} \quad d = e^{rh-\sigma\sqrt{h}}
 $$
-La probabilité d'un mouvement de prix du sous-jacent est la suivante :
+La probabilité d'un mouvement de prix du sous-jacent vers la branche supérieure est la suivante :
 $$
 p^{*}=\frac{e^{rh}-d}{u-d}
 $$
-Également, un autre point intéressant de l'évaluation d'option dans le modèle binomial est qu'il est possible de répliquer l'option à chaque noeuds de l'arbre. Cela se quantifie avec deux paramètres : $\Delta$ et $B$. Le paramètre $\Delta$ indique la quantité d'actions à acheter\\vendre et le paramètre $B$ indique le montant à emprunter\\prêter. Il est à noter qu'il est possible d'acheter des fractions d'actions.
+Également, un autre point intéressant de l'évaluation d'option dans le modèle binomial est qu'il est possible de répliquer l'option à chaque noeuds de l'arbre. Cela se quantifie avec deux paramètres : $\Delta$ et $B$. Le paramètre $\Delta$ indique la quantité d'actions à acheter/vendre et le paramètre $B$ indique le montant à emprunter/prêter. Il est à noter qu'il est possible d'acheter des fractions d'actions.
 $$
 \Delta=\frac{\theta_u-\theta_d}{S(u-d)} \qquad (2)
 $$
@@ -135,7 +135,7 @@ $$
 $$
 où U et D représentent respectivement $S\times u$ et $S\times d$
 
-Pour la mesure $\Delta$, $\theta_u$ représente la valeur à l'échance de l'option pour le prochain embranchement supérieur, tandis que $\theta_d$ repésente la valeur à l'échéance de l'option pour le prochain embranchement inférieur. Au dénominateur se retrouve la différence entre les paramètre de l'embrachement supérieur et l'embranchement inférieur que peut prendre le sous-jacent lors de la prochaine période. C'est donc un ratio entre les difféntes valeurs à l'échéance de l'option par rapport à l'écart du sous-jacent selon l'embranchement. Donc pour chaque variation de 1 du sous-jacent, il y aurait une variation de $\Delta$ de la valeur à l'échéance de l'option
+Pour la mesure $\Delta$, $\theta_u$ représente la valeur à l'échance de l'option pour le prochain embranchement supérieur, tandis que $\theta_d$ repésente la valeur à l'échéance de l'option pour le prochain embranchement inférieur. Au dénominateur se retrouve la différence entre les paramètre de l'embrachement supérieur et l'embranchement inférieur que peut prendre le sous-jacent lors de la prochaine période. C'est donc un ratio entre les différentes valeurs à l'échéance de l'option par rapport à l'écart du sous-jacent selon l'embranchement. Donc pour chaque variation de 1 du sous-jacent, il y aurait une variation de $\Delta$ de la valeur à l'échéance de l'option
 
 Quant au montant à emprunter ou à prêter, il représente le gain ou le montant à emprunter pour pouvoir avoir une position longue ou courte dans un option donné.
 
@@ -200,7 +200,7 @@ B = -69.64
 $$
 
 
-Donc étant donné que le delta est positif, pour répliquer l'option d'achat, il faut avoir une position courte dans le sous-jacent. Pour y arriver, il faut vendre des parties de sous-jacents jusqu'à concurence d'une valeur de B$\$$.
+Donc étant donné que le delta est positif, pour répliquer l'option d'achat, il faut avoir une position longue dans le sous-jacent. Pour y arriver, il faut emprunter une valeur de B$\$$ au taux sans risque.
 
 
 Les mêmes équations seront utilisées pour trouver les paramètres réplicatifs d'une option, mais pour l'option de vente.  En exemple, les paramètres de l'option de vente européenne avec échéance T = 0.5 seront calculés au troisième embranchement à l'avant dernier embranchement ($\Delta_{ddu}$) 
@@ -216,7 +216,7 @@ $P_d$ = 1.4
 
 On constate donc que le delta est négatif, cela s'explique par le fait qu'il y a moins de chance d'exercer l'option de vente si le prix du sous-jacent augmente, donc une augmentation du prix du sous-jacent résulte en une diminution de la valeur de l'option de vente. 
 
-Donc étant donné que le delta est négatif, pour répliquer l'option de vente, il faut donc se procurer une position longue dans le sous-jacent. Pour y arriver, il faut empruner un montant  B$\$$.
+Donc étant donné que le delta est négatif, pour répliquer l'option de vente, il faut donc se procurer une position courte dans le sous-jacent. Pour y arriver, il faut prêter un montant  B$\$$.
 
 Les prochaines figures correspondes à des options d'achat et ont 4 périodes chacunes, mais avec des échéances de T=0.5 ou T=2 respectivement. 
 
@@ -264,7 +264,7 @@ prix_call2 = call2$price
 
 Concernant les valeurs à l'échance, les conclusions sont les mêmes que présentées précédement, il y a de plus en de valeur à l'échance non nulles quand le temps d'échéance augmente pour un option d'achat. En comparant, on peut observer que le prix initial de l'option d'achat à T = 0.5 est de `r prix_call05` et que le prix initial de l'option d'achat à T = 2 est de `r prix_call2`. Donc, pour des options d'achat avec les mêmes paramètres, plus le temps d'ici l'échéance est grand, plus le prix de l'option sera élevé.
 
-Il est également pertinent d'observer l'histogramme des deltas et des B au fil des périodes, plus les périodes défilent, plus il est possible de déterminer à l'avance si l'option sera exercée ou non. Pour illustrer ce fait, il sera établi, tout en conservant les paramètres précédents, que si à 5 période de l'échéance de l'option le prix du sous-jacent est de 90$\$$ alors que le prix d'exercice est de 120$\$$, alors les probalités sont très faible d'exercer l'option, c'est pourquoi il y a une grande masse de deltas et de B situés près de 0, car l'option est réputée être "Out of the money". À l'inverse, si à la même période, le sous-jacent est de 160$\$$, l'option est réputée être "In the money" et aura de très fortes chances d'être exercée, cela explique donc pourquoi il y a un grande masse près de 1 pour les deltas et près de -120$\$$.
+Il est également pertinent d'observer l'histogramme des deltas et des B au fil des périodes, plus les périodes défilent, plus il est possible de déterminer à l'avance si l'option sera exercée ou non. Pour illustrer ce fait, il sera établi, tout en conservant les paramètres précédents, que si à 25 périodes de l'échéance de l'option le prix du sous-jacent est de 90$\$$ alors que le prix d'exercice est de 120$\$$, alors les probalités sont très faible d'exercer l'option, c'est pourquoi il y a une grande masse de deltas et de B situés près de 0, car l'option est réputée être "Out of the money". À l'inverse, si à la même période, le sous-jacent est de 160$\$$, l'option est réputée être "In the money" et aura de très fortes chances d'être exercée, cela explique donc pourquoi il y a un grande masse près de 1 pour les deltas et près de -120$\$$.
 
 Cependant, à la période 25, si le prix du sous-jacent est de 120$, l'option sera réputée "At the money", c'est donc pourquoi il y a également des masses près de 0.5 pour les deltas et croissant à partir de 20 pour les B. Car les scénarios où l'option soit exercée ou non sont tous les deux probables d'ici l'échéance.
 
