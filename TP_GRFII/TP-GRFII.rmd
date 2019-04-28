@@ -1,14 +1,41 @@
 ---
-title: "TP-GRFII"
-author: "Matis Brassard-Verrier, Samuel Provencher, Olivier Belhumeur"
 output: pdf_document
 ---
+\newpage
+\begin{titlingpage}
+  \centering
+  \Large
+  Travail fait par \\
+  \vspace{0.5cm}
+  \text{Samuel Provencher (111 181 794)}\\
+  \text{Matis Brassard-Verrier ()}\\
+  \text{Olivier Belhumeur (111 184 389)}\\
+  \vfill
+  \Large
+  Gestion du risque financier II \\
+  \vspace{0.5cm}
+  \text{ACT-2011}
+  \vfill
+  \Large
+  Travail pratique : Équipe 21\\
+  \vfill
+  \Large
+  Présenté à\\
+  \vspace{0.5cm}
+  \text{Thomas Landry}
+  \vfill
+  \Large
+  École d'actuariat\\
+  \text{Université Laval}\\
+  \text{29 avril 2019}
+\end{titlingpage}
+
 
 ```{r, echo=FALSE}
 library(derivmkts)
 #setwd("C:/Users/matis/Desktop/ACT-2011 GRF 2/Actuariat/TP_GRF2")
 
-setwd("C:/Users/Olivier/Desktop/Développement/Actuariat/2019/Session_H19/GRF-II/TP_GRF2")
+setwd("C:/Users/Olivier/Desktop/Développement/Actuariat/2019/Session_H19/GRFII/TP_GRFII")
 ```
 # Question 1
 ```{r, echo=FALSE, warning=FALSE}
@@ -173,6 +200,9 @@ B = -69.64
 $$
 
 
+Donc étant donné que le delta est positif, pour répliquer l'option d'achat, il faut avoir une position courte dans le sous-jacent. Pour y arriver, il faut vendre des parties de sous-jacents jusqu'à concurence d'une valeur de B$\$$.
+
+
 Les mêmes équations seront utilisées pour trouver les paramètres réplicatifs d'une option, mais pour l'option de vente.  En exemple, les paramètres de l'option de vente européenne avec échéance T = 0.5 seront calculés au troisième embranchement à l'avant dernier embranchement ($\Delta_{ddu}$) 
 
 Toujours avec l'équation, nous trouverons que $\Delta$ = -.12 et que B = 11.97. Car, $P_i$ (Put) =
@@ -184,20 +214,29 @@ $$
 $P_u$ = 0,
 $P_d$ = 1.4
 
-Les prochaines figures correspondes aux option d'achat et d'échéance ayant 4 périodes chacunes, mais avec des échéances de T=0.5 ou T=2. 
+On constate donc que le delta est négatif, cela s'explique par le fait qu'il y a moins de chance d'exercer l'option de vente si le prix du sous-jacent augmente, donc une augmentation du prix du sous-jacent résulte en une diminution de la valeur de l'option de vente. 
+
+Donc étant donné que le delta est négatif, pour répliquer l'option de vente, il faut donc se procurer une position longue dans le sous-jacent. Pour y arriver, il faut empruner un montant  B$\$$.
+
+Les prochaines figures correspondes à des options d'achat et ont 4 périodes chacunes, mais avec des échéances de T=0.5 ou T=2 respectivement. 
 
 
 ![](Call05.png)
 
 ![](Call2.png)
 
+On peut en déduire que plus le temps est grand avant la date d'échéance, plus les probabilités qu'il y ait une valeur à l'échéance non nulle d'une option achat sont grandes. C'est notament le cas en raison du taux sans risque plus grand que le taux de dividende ($r_f$ $\ge$ $\delta$), donc l'espérance de la hausse de prix du sous-jacent est positive au fil du temps.
+
+Les prochaines figures correspondes à des options de vente et ont 4 périodes chacunes, mais avec des échéances de T=0.5 ou T=2 respectivement. 
+
 ![](put05.png)
 ![](put2.png)
 
+À l'invserse des options d'achat, on peut en déduire que plus le temps est grand avant la date d'échéance, plus les probabilités qu'il y ait une valeur à l'échéance non nulle d'une option achat sont petites. 
 
 
-Maintenant, les mêmes caractérisques 
 
+Maintenant, les mêmes caractérisques sont maintenues, mais au lieu de faire le modèle à 4 périodes, il y aura 100 périodes. Le prix des options se rapprochent de plus en plus du prix calculé à l'aide du modèle continue de *Black-Scholes* qui sera présenté plus loin dans le rapport. 
 
 
 
@@ -207,80 +246,30 @@ Maintenant, les mêmes caractérisques
 call05 <- binomopt(s=100, k=120, v=sd, r=Rfree_est, tt=0.5, d=0, nstep=100, american=F, putopt=F, returntrees=T)
 
 prix_call05 = call05$price
-```
-le prix initial de l'option d'achat à T = 0.5 est de `r prix_call05`
-
-
-```{r, echo=FALSE, warning=FALSE}
-hist(pmax(call05$stree[,101]-120, 0), main = "Distribution des prix à la valeur à l'échéance  \nde l'option d'achat à échéance T = 0.5 ",
-  xlab = "prix à l'échéance", ylab = "Fréquence")
-
-```
-
-```{r, echo=FALSE, eval=TRUE, fig.height=10, fig.width=8}
-par(mfrow = c(3, 1))
-hist(call05$deltatree[1:26, 26], main = paste("Histogramme des deltas à la période 25"),
-     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
-hist(call05$deltatree[1:51, 51], main = paste("Histogramme des deltas à la période 50"),
-     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
-hist(call05$deltatree[1:76, 76], main = paste("Histogramme des deltas à la période 75"),
-     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
-par(mfrow = c(1, 1))
-```
-
-```{r, echo=FALSE, eval=TRUE, fig.height=10, fig.width=8}
-par(mfrow = c(3, 1))
-hist(call05$bondtree[1:26, 26],  main = paste("Histogramme des B à la période 25"),
-     xlab = paste("B observés"), ylab = paste("Fréquence d'observation"))
-hist(call05$bondtree[1:51, 51],  main = paste("Histogramme des B à la période 50"),
-     xlab = paste("B observés"), ylab = paste("Fréquence d'observation"))
-hist(call05$bondtree[1:76, 76],  main = paste("Histogramme des B à la période 75"),
-     xlab = paste("B observés"), ylab = paste("Fréquence d'observation"))
-par(mfrow = c(1, 1))
-```
-
-
-call2
-
-```{r, echo=FALSE, warning=FALSE}
 
 call2 <- binomopt(s=100, k=120, v=sd, r=Rfree_est, tt=2, d=0, nstep=100, american=F, putopt=F, returntrees=T)
 
 prix_call2 = call2$price
 ```
-le prix initial de l'option d'achat à T = 2 est de `r prix_call2`
+
+\newpage
+
+![](hist_Call05.png)
+
+\newpage
+
+![](hist_Call2.png)
+
+\newpage
+
+Concernant les valeurs à l'échance, les conclusions sont les mêmes que présentées précédement, il y a de plus en de valeur à l'échance non nulles quand le temps d'échéance augmente pour un option d'achat. En comparant, on peut observer que le prix initial de l'option d'achat à T = 0.5 est de `r prix_call05` et que le prix initial de l'option d'achat à T = 2 est de `r prix_call2`. Donc, pour des options d'achat avec les mêmes paramètres, plus le temps d'ici l'échéance est grand, plus le prix de l'option sera élevé.
+
+Il est également pertinent d'observer l'histogramme des deltas et des B au fil des périodes, plus les périodes défilent, plus il est possible de déterminer à l'avance si l'option sera exercée ou non. Pour illustrer ce fait, il sera établi, tout en conservant les paramètres précédents, que si à 5 période de l'échéance de l'option le prix du sous-jacent est de 90$\$$ alors que le prix d'exercice est de 120$\$$, alors les probalités sont très faible d'exercer l'option, c'est pourquoi il y a une grande masse de deltas et de B situés près de 0, car l'option est réputée être "Out of the money". À l'inverse, si à la même période, le sous-jacent est de 160$\$$, l'option est réputée être "In the money" et aura de très fortes chances d'être exercée, cela explique donc pourquoi il y a un grande masse près de 1 pour les deltas et près de -120$\$$.
+
+Cependant, à la période 25, si le prix du sous-jacent est de 120$, l'option sera réputée "At the money", c'est donc pourquoi il y a également des masses près de 0.5 pour les deltas et croissant à partir de 20 pour les B. Car les scénarios où l'option soit exercée ou non sont tous les deux probables d'ici l'échéance.
 
 
-```{r, echo=FALSE, warning=FALSE}
-hist(pmax(call05$stree[,101]-120, 0), main = "Distribution des prix à la valeur à l'échéance  \nde l'option d'achat à échéance T = 2 ",
-  xlab = "Valeur à l'échéance", ylab = "Fréquence")
-
-```
-
-```{r, echo=FALSE, eval=TRUE, fig.height=10, fig.width=8}
-par(mfrow = c(3, 1))
-hist(call2$deltatree[1:26, 26], main = paste("Histogramme des deltas à la période 25"),
-     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
-hist(call2$deltatree[1:51, 51], main = paste("Histogramme des deltas à la période 50"),
-     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
-hist(call2$deltatree[1:76, 76], main = paste("Histogramme des deltas à la période 75"),
-     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
-par(mfrow = c(1, 1))
-```
-
-```{r, echo=FALSE, eval=TRUE, fig.height=10, fig.width=8}
-par(mfrow = c(3, 1))
-hist(call2$bondtree[1:26, 26],  main = paste("Histogramme des B à la période 25"),
-     xlab = paste("B observés"), ylab = paste("Fréquence d'observation"))
-hist(call2$bondtree[1:51, 51],  main = paste("Histogramme des B à la période 50"),
-     xlab = paste("B observés"), ylab = paste("Fréquence d'observation"))
-hist(call2$bondtree[1:76, 76],  main = paste("Histogramme des B à la période 75"),
-     xlab = paste("B observés"), ylab = paste("Fréquence d'observation"))
-par(mfrow = c(1, 1))
-```
-
-
-
+\newpage
 
 
 ```{r, echo=FALSE, warning=FALSE}
@@ -290,80 +279,26 @@ put05 <- binomopt(s=100, k=90, v=sd, r=Rfree_est, tt=0.5, d=0, nstep=100, americ
 
 prix_put05 = put05$price
 
-```
-
-le prix initial de l'option de vente à T = 0.5 est de `r prix_put05`
-
-```{r, echo=FALSE, warning=FALSE}
-hist(pmax(90 - put05$stree[,101], 0), main = "Distribution des prix à la valeur à l'échéance de  \nl'option de vente à échéance T = 0.5 ",
-     xlab = "Valeur à l'échéance", ylab = "Fréquence")
-```
-
-
-```{r, echo=FALSE, eval=TRUE, fig.height=10, fig.width=8}
-par(mfrow = c(3, 1))
-hist(put05$deltatree[1:26, 26], main = paste("Histogramme des deltas à la période 25"),
-     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
-hist(put05$deltatree[1:51, 51], main = paste("Histogramme des deltas à la période 50"),
-     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
-hist(put05$deltatree[1:76, 76], main = paste("Histogramme des deltas à la période 75"),
-     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
-par(mfrow = c(1, 1))
-```
-
-```{r, echo=FALSE, eval=TRUE, fig.height=10, fig.width=8}
-par(mfrow = c(3, 1))
-hist(put05$bondtree[1:26, 26],  main = paste("Histogramme des B à la période 25"),
-     xlab = paste("B observés"), ylab = paste("Fréquence d'observation"))
-hist(put05$bondtree[1:51, 51],  main = paste("Histogramme des B à la période 50"),
-     xlab = paste("B observés"), ylab = paste("Fréquence d'observation"))
-hist(put05$bondtree[1:76, 76],  main = paste("Histogramme des B à la période 75"),
-     xlab = paste("B observés"), ylab = paste("Fréquence d'observation"))
-par(mfrow = c(1, 1))
-```
-
-
-
-```{r, echo=FALSE, warning=FALSE}
 put2 <- binomopt(s=100, k=90, v=sd, r=Rfree_est, tt=2, d=0, nstep=100, american=F, putopt=T, 
                  returntrees=T)
 
 prix_put2 = put2$price
 
 ```
-le prix initial de l'option de vente à T = 2 est de `r prix_put2`
-
-```{r, echo=FALSE, warning=FALSE}
 
 
+![](hist_put05.png)
 
-hist(pmax(90 - put2$stree[,101], 0), main = "Distribution des prix à la valeur à l'échéance de  \nl'option de vente à échéance T = 2 ",
-     xlab = "Valeur à l'échéance", ylab = "Fréquence" )
+\newpage
 
-```
+![](hist_put2.png)
 
-```{r, echo=FALSE, eval=TRUE, fig.height=10, fig.width=8}
-par(mfrow = c(3, 1))
-hist(put2$deltatree[1:26, 26], main = paste("Histogramme des deltas à la période 25"),
-     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
-hist(put2$deltatree[1:51, 51], main = paste("Histogramme des deltas à la période 50"),
-     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
-hist(put2$deltatree[1:76, 76], main = paste("Histogramme des deltas à la période 75"),
-     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
-par(mfrow = c(1, 1))
-```
+\newpage
 
-```{r, echo=FALSE, eval=TRUE, fig.height=10, fig.width=8}
-par(mfrow = c(3, 1))
-hist(put2$bondtree[1:26, 26],  main = paste("Histogramme des B à la période 25"),
-     xlab = paste("B observés"), ylab = paste("Fréquence d'observation"))
-hist(put2$bondtree[1:51, 51],  main = paste("Histogramme des B à la période 50"),
-     xlab = paste("B observés"), ylab = paste("Fréquence d'observation"))
-hist(put2$bondtree[1:76, 76],  main = paste("Histogramme des B à la période 75"),
-     xlab = paste("B observés"), ylab = paste("Fréquence d'observation"))
-par(mfrow = c(1, 1))
-```
 
+Concernant les valeurs à l'échance, les conclusions sont les mêmes que présentées précédement pour les options de ventes, il y a de moins en de moins de valeur à l'échance non nulles quand le temps d'échéance augmente pour une option de vente. On observe que le prix initial de l'option de vente à T = 0.5 est de `r prix_put05` et le prix initial de l'option de vente à T = 2 est de `r prix_put2`. Donc, pour des options d'achat de même paramètres, moins le temps d'ici l'échéance est grand, plus la valeur de l'option sera grande.
+
+Le constat est semblable à celui des options d'achats, mais avec des paramètres réplicatifs inversés. donc les deltas tendent vers 0 ou -1 plus les périodes avancent, et le paramètres B tend vers 0 ou 80$\$$.
 
 \newpage
 
@@ -575,7 +510,9 @@ $$
 $$
 d_2=d_1-\sigma \sqrt{T}
 $$
-
+$$
+N(x) = P(Z\leq x), \quad Z \sim N(\mu = 0, \sigma = 1)
+$$
 Les caractéristiques du sous-jacent permettant d'évaluer le prix selon la méthode *Black-Scholes* sont présentées dans le tableau ci-dessous. La volatilité et la force d'intérêt sans risque ont été estimés à la question 1 à l'aide de données historiques. Les autres paramètres sont mentionnées dans l'énoncé ou proviennent d'hypothèse que nous avons pris.
 \newline
 \begin{itemize}
@@ -604,7 +541,7 @@ Les paramètres du sous-jacent utilisés pour évaluer le prix des options sont 
 |:----------|:--------:|:---------:|
 |    Prix initial  |    $S$      |     100\$    |
 | Prix d'exercice  |    $K$      |     90\$ ou 120\$    |
-|   Volatilité        |     $\sigma$     |   `r sd*100`%     |
+|   Volatilité        |     $\hat{\sigma}$     |   `r sd*100`%     |
 | Force d'interêt sans risque     |     $r$     |     `r Rfree_est*100`%    |
 | Temps à l'échéance  |     $T$     |     6 mois et 2 ans    |
 | Taux de dividendes  |     $\delta$     |   0     |
@@ -626,6 +563,7 @@ En appliquant les paramètres du sous-jacent aux formules de *Black-Scholes*, il
 À la lumière des résultats présentés dans le tableau ci-dessus, il est possible de comparer avec les résultats obtenus à la question 2 où les options étaient tarifées à l'aide d'un arbre binomial. On peut observer que les prix des options évaluées avec le modèle binomial à 4 périodes sont sensiblement différents de ceux du modèle *Black-Scholes*. Pour ce qui est du modèle binomial à 100 périodes, les prix sont très similaires à ceux obtenus à l'aide du modèle *Black-Scholes*. Cela n'est pas surprenant puisque le modèle *Black-Scholes* peut être vu comme un modèle binomial dont le nombre de période tend vers l'infini. Un arbre binomial à 100 périodes sur une période de temps aussi petite, c'est-à-dire 6 mois et 2 ans, représente ainsi une approximation adéquate du modèle continu de *Black-Scholes*.
 
 \newpage
+
 
 # Question 6
 ##### *Greeks*
@@ -749,6 +687,330 @@ points(120, Res[121], col = "red", pch = 17)
 
 plot(K, -Res, type = "l", xlab = abcisse, ylab = "Inverse de Delta", main = "Option d'achat à échéance 2 ans")
 points(120, -Res[121], col = "red", pch = 17)
+```
+
+\newpage
+# Annexe: Code R
+
+```{r, eval = FALSE}
+## TP GRF 2 ##
+
+
+library(derivmkts)
+
+## 1 ####
+
+data <- as.numeric(unlist(read.csv2("Data.csv", sep = ";"))) ## équipe 21
+
+
+##Estime volatilité
+
+
+ContReturn <- numeric(length(data)-1) ## 1 de moins
+
+for(i in seq(length(data)-1))
+    {
+                    ContReturn[i] <- log(data[i+1]/data[i])
+
+}
+ContReturn
+sd <- sd(ContReturn)*sqrt(12) ##Annuelle
+sd
+
+##Estime rf
+
+Rfree <- read.csv("lookup-2.csv", skip = 11)[,2]/100
+Rfree
+length(Rfree)#60 chill
+Rfree_est <- log(1+mean(Rfree))
+
+t <- c(0.5, 2)
+
+## 2 ####
+
+# 4 périodes
+
+call05 <- binomopt(s=100, k=120, v=sd, r=Rfree_est, tt=0.5, d=0, nstep=4, american=F, 
+                   putopt=F, returntrees=T)
+call05$price
+call05$oppricetree
+call05$deltatree
+call05$bondtree
+binomplot(s=100, k=120, v=sd, r=Rfree_est, tt=0.5, d=0, nstep=4, american=F, putopt=F, 
+          returnprice=T, plotarrows=T, drawstrike=T, plotvalues=T, titles=T)
+
+call2 <- binomopt(s=100, k=120, v=sd, r=Rfree_est, tt=2, d=0, nstep=4, american=T, 
+                  putopt=F, returntrees=T)
+call2$price
+call2$oppricetree
+call2$deltatree
+call2$bondtree
+binomplot(s=100, k=120, v=sd, r=Rfree_est, tt=2, d=0, nstep=4, american=F, putopt=F, 
+          returnprice=T, plotarrows=T, drawstrike=T, plotvalues=T, titles=T)
+
+put05 <- binomopt(s=100, k=90, v=sd, r=Rfree_est, tt=0.5, d=0, nstep=4, american=F, 
+                  putopt=T, returntrees=T)
+put05$price
+put05$oppricetree
+put05$deltatree
+put05$bondtree
+binomplot(s=100, k=90, v=sd, r=Rfree_est, tt=0.5, d=0, nstep=4, american=F, putopt=T, 
+          returnprice=T, plotarrows=T, drawstrike=T, plotvalues=T, titles=T)
+
+put2 <- binomopt(s=100, k=90, v=sd, r=Rfree_est, tt=2, d=0, nstep=4, american=F, 
+                 putopt=T, returntrees=T)
+put2$price
+put2$oppricetree
+put2$deltatree
+put2$bondtree
+binomplot(s=100, k=90, v=sd, r=Rfree_est, tt=2, d=0, nstep=4, american=F, putopt=T, 
+          returnprice=T, plotarrows=T, drawstrike=T, plotvalues=T, titles=T)
+
+# 100 périodes
+
+call05 <- binomopt(s=100, k=120, v=sd, r=Rfree_est, tt=0.5, d=0, nstep=100, american=F, 
+                   putopt=F, returntrees=T)
+call05$price
+
+hist(pmax(call05$stree[,101]-120, 0))
+
+call05$deltatree[, c(1, 26, 51, 76)]
+call05$greeks[1]
+hist(call05$deltatree[1:26, 26])
+hist(call05$deltatree[1:51, 51])
+hist(call05$deltatree[1:76, 76])
+
+call05$bondtree[, c(1, 26, 51, 76)]
+call05$bondtree[1, 1]
+hist(call05$bondtree[1:26, 26])
+hist(call05$bondtree[1:51, 51])
+hist(call05$bondtree[1:76, 76])
+
+call2 <- binomopt(s=100, k=120, v=sd, r=Rfree_est, tt=2, d=0, nstep=100, american=F, 
+                  putopt=F, returntrees=T)
+call2$price
+
+hist(pmax(call2$stree[,101]-120, 0))
+
+call2$deltatree[, c(1, 26, 51, 76)]
+call2$greeks[1]
+hist(call2$deltatree[1:26, 26])
+hist(call2$deltatree[1:51, 51])
+hist(call2$deltatree[1:76, 76])
+
+call2$bondtree[, c(1, 26, 51, 76)]
+call2$bondtree[1, 1]
+hist(call2$bondtree[1:26, 26])
+hist(call2$bondtree[1:51, 51])
+hist(call2$bondtree[1:76, 76])
+
+put05 <- binomopt(s=100, k=90, v=sd, r=Rfree_est, tt=0.5, d=0, nstep=100, american=F, 
+                  putopt=T, returntrees=T)
+put05$price
+
+hist(pmax(90 - put05$stree[,101], 0))
+
+put05$deltatree[, c(1, 26, 51, 76)]
+put05$greeks[1]
+hist(put05$deltatree[1:26, 26])
+hist(put05$deltatree[1:51, 51])
+hist(put05$deltatree[1:76, 76])
+
+put05$bondtree[, c(1, 26, 51, 76)]
+put05$bondtree[1, 1]
+hist(put05$bondtree[1:26, 26])
+hist(put05$bondtree[1:51, 51])
+hist(put05$bondtree[1:76, 76])
+
+put2 <- binomopt(s=100, k=90, v=sd, r=Rfree_est, tt=2, d=0, nstep=100, american=F, 
+                 putopt=T, returntrees=T)
+put2$price
+
+hist(pmax(90 - put2$stree[,101], 0))
+
+put2$deltatree[, c(1, 26, 51, 76)]
+put2$greeks[1]
+hist(put2$deltatree[1:26, 26])
+hist(put2$deltatree[1:51, 51])
+hist(put2$deltatree[1:76, 76])
+
+put2$bondtree[, c(1, 26, 51, 76)]
+put2$bondtree[1, 1]
+hist(put2$bondtree[1:26, 26])
+hist(put2$bondtree[1:51, 51])
+hist(put2$bondtree[1:76, 76])
+
+
+## 3 ####
+
+par(mfrow=c(1,2))
+k <- seq(0, 200, by = 0.1)
+
+#### 4 périodes
+
+
+#Put2
+
+Res <- sapply(k, function(i) binomopt(100, i, sd, Rfree_est, 2, 0, nstep = 4, 
+                                      putopt = TRUE, american = F))
+
+plot(k, Res, type = "l", xlab = "Prix d'exercice", ylab = "Prix de l'option", 
+     main = "Put 2 ans, 4 périodes")
+
+#Call2
+
+Res <- sapply(k, function(i) binomopt(100, i, sd, Rfree_est, 2, 0, nstep = 4, 
+                                      american = F))
+
+plot(k, Res, type = "l", xlab = "Prix d'exercice", ylab = "Prix de l'option", 
+     main = "Call 2 ans, 4 périodes")
+
+
+
+#### 100 périodes
+
+
+#Put2
+
+
+Res <- sapply(k, function(i) binomopt(100, i, sd, Rfree_est, 2, 0, nstep = 100, 
+                                      putopt = TRUE, american = F))
+
+plot(k, Res, type = "l", xlab = "Prix d'exercice", ylab = "Prix de l'option", 
+     main = "Put 2 ans, 100 périodes")
+
+
+#Call2
+
+
+Res <- sapply(k, function(i) binomopt(100, i, sd, Rfree_est, 2, 0, nstep = 100, 
+                                      american = F))
+
+plot(k, Res, type = "l", xlab = "Prix d'exercice", ylab = "Prix de l'option", 
+     main = "Call 2 ans, 100 périodes")
+
+
+
+
+## 4 ####
+
+par(mfrow=c(1,1))
+
+# 4 périodes
+put2 <- binomopt(s=100, k=90, v=sd, r=Rfree_est, tt=2, d=0, nstep=4, american=T, putopt=T, 
+                 returntrees=T)
+put2$price
+put2$oppricetree
+put2$deltatree
+put2$bondtree
+binomplot(s=100, k=90, v=sd, r=Rfree_est, tt=2, d=0, nstep=4, american=T, putopt=T, 
+          returnprice=T, plotarrows=T, drawstrike=T, plotvalues=T, titles=T)
+
+Res <- sapply(k, function(i) binomopt(100, i, sd, Rfree_est, 2, 0, nstep = 4, 
+                                      putopt = TRUE, american = T))
+
+plot(k, Res, type = "l", xlab = "Prix d'exercice", ylab = "Prix de l'option", 
+     main = "Put 2 ans, 4 périodes")
+
+# 100 périodes
+put2 <- binomopt(s=100, k=90, v=sd, r=Rfree_est, tt=2, d=0, nstep=100, american=T, 
+                 putopt=T, returntrees=T)
+put2$price
+
+hist(pmax(90-put2$stree[,101],0))
+
+put2$deltatree[, c(1, 26, 51, 76)]
+put2$greeks[1]
+hist(put2$deltatree[1:26, 26])
+hist(put2$deltatree[1:51, 51])
+hist(put2$deltatree[1:76, 76])
+
+put2$bondtree[, c(1, 26, 51, 76)]
+put2$bondtree[1, 1]
+hist(put2$bondtree[1:26, 26])
+hist(put2$bondtree[1:51, 51])
+hist(put2$bondtree[1:76, 76])
+
+Res <- sapply(k, function(i) binomopt(100, i, sd, Rfree_est, 2, 0, nstep = 100, 
+                                      putopt = TRUE, american = T))
+
+plot(k, Res, type = "l", xlab = "Prix d'exercice", ylab = "Prix de l'option", 
+     main = "Put 2 ans, 100 périodes")
+
+put2$exertree
+
+sum(put2$exertree[, 26]) ## Le nbre d'embranchement
+sum(put2$exertree[, 51])
+sum(put2$exertree[, 76])
+sum(put2$exertree[, 101])
+
+## 5 ####
+
+bs <- function(S0, K, t, r, delta = 0, sd, Call = TRUE) 
+{
+    
+    FPS <- S0*exp(-delta*t)
+    FPK <- K*exp(-r*t)
+    
+    
+    d1 <- (log(FPS/FPK) + 0.5*sd^2*t)/(sd*sqrt(t))
+    d2 <- d1 - sd*sqrt(t)
+    
+    if(Call)
+    {
+        V <- FPS*pnorm(d1) - FPK*pnorm(d2)
+        Delta <- exp(-delta*t)*pnorm(d1)
+        Gamma <- exp(-delta*t)*dnorm(d1)/S0/sd/sqrt(t)
+        Theta <- 0
+        Vega <- 0
+        Rho <- 0
+        Psi <- 0
+    }
+    
+    else
+    {
+        V <- FPK*pnorm(-d2) - FPS*pnorm(-d1)
+        Delta <- -exp(-delta*t)*pnorm(-d1)
+        Gamma <- exp(-delta*t)*dnorm(d1)/S0/sd/sqrt(t)
+        Theta <- 0 
+        Vega <- 0
+        Rho <- 0
+        Psi <- 0
+    }
+        
+    
+    list(Value = V, Delta = Delta, Gamma = Gamma, Vega = Vega, Rho = Rho, Psi = Psi)
+}
+
+
+P <- lapply(seq_along(t), function(i) bs(S0 = 100, K = 90, t = t[i], r = Rfree_est, 
+                                         sd = sd, Call = F))
+C <- lapply(seq_along(t), function(i) bs(S0 = 100, K = 120, t = t[i], r = Rfree_est, 
+                                         sd = sd))
+
+P[[1]]$Value
+P[[2]]$Value
+C[[1]]$Value
+C[[2]]$Value
+
+## Facon plus easy de tout avoir
+## Formule package derivmkts
+
+greeks2(bsput, list(s=100, k=90, v=sd, r=Rfree_est, tt=0.5, d=0)) 
+greeks2(bsput, list(s=100, k=90, v=sd, r=Rfree_est, tt=2, d=0))
+greeks2(bscall, list(s=100, k=120, v=sd, r=Rfree_est, tt=0.5, d=0))
+greeks2(bscall, list(s=100, k=120, v=sd, r=Rfree_est, tt=2, d=0))
+
+## 6 ####
+
+
+P[[2]][-1]
+C[[2]][-1]
+
+greeks2(bsput, list(s=100, k=90, v=sd, r=Rfree_est, tt=2, d=0))
+greeks2(bscall, list(s=100, k=120, v=sd, r=Rfree_est, tt=2, d=0))
+
+
 ```
 
 
