@@ -34,7 +34,7 @@ output: pdf_document
 ```{r, echo=FALSE}
 library(derivmkts)
 #setwd("C:/Users/matis/Desktop/ACT-2011 GRF 2/Actuariat/TP_GRF2")
-setwd("C:/Users/Matis/Desktop/Actuariat/TP_GRFII")
+#setwd("C:/Users/Matis/Desktop/Actuariat/TP_GRFII")
 #setwd("C:/Users/Olivier/Desktop/Développement/Actuariat/2019/Session_H19/GRFII/TP_GRFII")
 ```
 # Question 1
@@ -224,9 +224,13 @@ call2 <- binomopt(s=100, k=120, v=sd, r=Rfree_est, tt=2, d=0, nstep=4, american=
 
 Les prochaines figures correspondent à des options d'achat et ont 4 périodes chacune, mais avec des échéances de $T=0.5$ ou $T=2$ respectivement. 
 
-![](Call05.png)
+```{r, echo=FALSE, fig.cap="Arbre binomial d'une option d'achat européenne (0.5 ans, 4 périodes)", out.width = '100%'}
+knitr::include_graphics("Call05.png")
+```
 
-![](Call2.png)
+```{r, echo=FALSE, fig.cap="Arbre binomial d'une option d'achat européenne (2 ans, 4 périodes)", out.width = '100%'}
+knitr::include_graphics("Call2.png")
+```
 
 On peut en déduire que plus le temps est grand avant la date d'échéance, plus les probabilités qu'il y ait une valeur à l'échéance non nulle d'une option achat sont grandes. C'est notamment le cas en raison du taux sans risque plus grand que le taux de dividende ($r_f > \delta$), donc l'espérance de la hausse de prix du sous-jacent est positive au fil du temps et est amplifiée lorsque $T$ augmente. Les prix pour les options d'achat sont présentés dans le tableau suivant.
 
@@ -246,9 +250,13 @@ put2 <- binomopt(s=100, k=90, v=sd, r=Rfree_est, tt=2, d=0, nstep=4, american=F,
 
 Les prochaines figures correspondent à des options de vente et ont 4 périodes chacune, mais avec des échéances de $T=0.5$ ou $T=2$ respectivement. 
 
-![](put05.png)
+```{r, echo=FALSE, fig.cap="Arbre binomial d'une option de vente européenne (0.5 ans, 4 périodes)", out.width = '100%'}
+knitr::include_graphics("put05.png")
+```
 
-![](put2.png)
+```{r, echo=FALSE, fig.cap="Arbre binomial d'une option de vente européenne (2 ans, 4 périodes)", out.width = '100%'}
+knitr::include_graphics("put2.png")
+```
 
 À l'inverse des options d'achat, on peut en déduire que plus le temps est grand avant la date d'échéance, plus les probabilités qu'il y ait une valeur à l'échéance non nulle d'une option achat sont petites. En effet, comme $r_f > \delta$, la valeur du sous-jacent va en moyenne croître dans le temps, et cette croissance est de plus en plus grande avec le temps. La probabilité d'une décroissance de l'action est donc atténuée lorsque $T$ augmente. Les prix pour les options de vente sont présentés dans le tableau suivant. 
 
@@ -278,11 +286,45 @@ Maintenant, les mêmes caractérisques sont maintenues, mais au lieu de faire le
 |2 ans|`r call2$price`\$|`r call2$deltatree[1,1]`|`r call2$bondtree[1,1]`\$|
 
 
-![](hist_Call05.png)
+```{r, echo=FALSE, eval=TRUE, fig.height=14, fig.width=10}
+layout(matrix(c(1,1,2,3,4,5,6,7), 4, 2, byrow=T))
+hist(pmax(call05$stree[,101]-120, 0), main = paste("Histogramme des valeurs à l'échéance de l'option d'achat européenne à échéance T=0.5"),
+     xlab = paste("Valeurs à l'échéance observées"), ylab = paste("Fréquence d'observation"))
+hist(call05$deltatree[1:26, 26], main = paste("Histogramme des deltas à la période 25"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(call05$bondtree[1:26, 26], main = paste("Histogramme des B à la période 25"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(call05$deltatree[1:51, 51], main = paste("Histogramme des deltas à la période 50"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(call05$bondtree[1:51, 51], main = paste("Histogramme des B à la période 50"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(call05$deltatree[1:76, 76], main = paste("Histogramme des deltas à la période 75"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(call05$bondtree[1:76, 76], main = paste("Histogramme des B à la période 75"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+par(mfrow = c(1,1))
+```
 
 \newpage
 
-![](hist_Call2.png)
+```{r, echo=FALSE, eval=TRUE, fig.height=14, fig.width=10}
+layout(matrix(c(1,1,2,3,4,5,6,7), 4, 2, byrow=T))
+hist(pmax(call2$stree[,101]-120, 0), main = paste("Histogramme des valeurs à l'échéance de l'option d'achat européenne à échéance T=2"),
+     xlab = paste("Valeurs à l'échéance observées"), ylab = paste("Fréquence d'observation"))
+hist(call2$deltatree[1:26, 26], main = paste("Histogramme des deltas à la période 25"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(call2$bondtree[1:26, 26], main = paste("Histogramme des B à la période 25"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(call2$deltatree[1:51, 51], main = paste("Histogramme des deltas à la période 50"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(call2$bondtree[1:51, 51], main = paste("Histogramme des B à la période 50"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(call2$deltatree[1:76, 76], main = paste("Histogramme des deltas à la période 75"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(call2$bondtree[1:76, 76], main = paste("Histogramme des B à la période 75"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+par(mfrow = c(1,1))
+```
 
 \newpage
 
@@ -316,14 +358,47 @@ Le tableau ci-dessous présente les prix initiaux pour les options de vente pour
 |6 mois|`r put05$price`\$|`r put05$deltatree[1,1]`|`r put05$bondtree[1,1]`\$|
 |2 ans|`r put2$price`\$|`r put2$deltatree[1,1]`|`r put2$bondtree[1,1]`\$|
 
-![](hist_put05.png)
+```{r, echo=FALSE, eval=TRUE, fig.height=14, fig.width=10}
+layout(matrix(c(1,1,2,3,4,5,6,7), 4, 2, byrow=T))
+hist(pmax(put05$stree[,101]-120, 0), main = paste("Histogramme des valeurs à l'échéance de l'option de vente européenne à échéance T=0.5"),
+     xlab = paste("Valeurs à l'échéance observées"), ylab = paste("Fréquence d'observation"))
+hist(put05$deltatree[1:26, 26], main = paste("Histogramme des deltas à la période 25"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(put05$bondtree[1:26, 26], main = paste("Histogramme des B à la période 25"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(put05$deltatree[1:51, 51], main = paste("Histogramme des deltas à la période 50"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(put05$bondtree[1:51, 51], main = paste("Histogramme des B à la période 50"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(put05$deltatree[1:76, 76], main = paste("Histogramme des deltas à la période 75"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(put05$bondtree[1:76, 76], main = paste("Histogramme des B à la période 75"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+par(mfrow = c(1,1))
+```
 
 \newpage
 
-![](hist_put2.png)
+```{r, echo=FALSE, eval=TRUE, fig.height=14, fig.width=10}
+layout(matrix(c(1,1,2,3,4,5,6,7), 4, 2, byrow=T))
+hist(pmax(put2$stree[,101]-120, 0), main = paste("Histogramme des valeurs à l'échéance de l'option de vente européenne à échéance T=2"),
+     xlab = paste("Valeurs à l'échéance observées"), ylab = paste("Fréquence d'observation"))
+hist(put2$deltatree[1:26, 26], main = paste("Histogramme des deltas à la période 25"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(put2$bondtree[1:26, 26], main = paste("Histogramme des B à la période 25"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(put2$deltatree[1:51, 51], main = paste("Histogramme des deltas à la période 50"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(put2$bondtree[1:51, 51], main = paste("Histogramme des B à la période 50"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(put2$deltatree[1:76, 76], main = paste("Histogramme des deltas à la période 75"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+hist(put2$bondtree[1:76, 76], main = paste("Histogramme des B à la période 75"),
+     xlab = paste("Deltas observés"), ylab = paste("Fréquence d'observation"))
+par(mfrow = c(1,1))
+```
 
 \newpage
-
 
 Concernant les valeurs à l'échance, les conclusions sont les mêmes que présentées précédemment pour les options d'achat: il y a de moins en moins de valeurs à l'échance non nulles quand le temps d'échéance augmente pour une option de vente. On observe que le prix initial de l'option de vente à T = 0.5 est de `r prix_put05`\$ et le prix initial de l'option de vente à T = 2 est de `r prix_put2`\$. Donc, pour des options de vente, plus le temps d'ici l'échéance est grand, plus la valeur de l'option sera grande, \textit{ceteris paribus}.
 
