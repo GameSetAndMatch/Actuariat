@@ -8,7 +8,7 @@ output: pdf_document
   Travail fait par \\
   \vspace{0.5cm}
   \text{Samuel Provencher (111 181 794)}\\
-  \text{Matis Brassard-Verrier ()}\\
+  \text{Matis Brassard-Verrier (111 182 740)}\\
   \text{Olivier Belhumeur (111 184 389)}\\
   \vfill
   \Large
@@ -34,7 +34,7 @@ output: pdf_document
 ```{r, echo=FALSE}
 library(derivmkts)
 #setwd("C:/Users/matis/Desktop/ACT-2011 GRF 2/Actuariat/TP_GRF2")
-
+setwd("C:/Users/Matis/Desktop/Actuariat/TP_GRFII")
 #setwd("C:/Users/Olivier/Desktop/Développement/Actuariat/2019/Session_H19/GRFII/TP_GRFII")
 ```
 # Question 1
@@ -54,23 +54,23 @@ Rfree_est <- log(1+mean(Rfree))
 t <- c(0.5, 2)
 ```
 
-Pour déterminer l'arbre binomial à terme (forward), il est nécessaire d'obtenir la valeur de la volatilité du du sous-jacent ($\hat{\sigma}$), la force d'interêt sans risque $r$, le taux de dividende $\delta$, ainsi que la longueur de la période $h$. Pour simplifier les calculs, le taux de dividende sera supposé nul. 
-\newline
+Pour déterminer l'arbre binomial à terme (forward), il est nécessaire d'obtenir la valeur de la volatilité du sous-jacent ($\hat{\sigma}$), la force d'interêt sans risque $r$, le taux de dividende $\delta$, ainsi que la longueur de la période $h$. Pour simplifier les calculs, le taux de dividende sera supposé nul. 
+
 Le prix à terme à $t$ pour la livraison du sous-jacent au temps $t+h$ est le suivant:
 
 $$
 F_{t,t+h} = S_te^{(r-\delta)h} = S_te^{rh}
 $$
 
-Les paramètres de la branche suppérieure sont définis comme suit:
+Les paramètres de la branche supérieure sont définis comme suit:
 $$
 uS_t = F_{t,t+h}e^{\sigma\sqrt{h}}
 $$
-Les paramètres de la branche inférieur sont définis comme suit:
+Les paramètres de la branche inférieure sont définis comme suit:
 $$
 dS_t = F_{t,t+h}e^{-\sigma\sqrt{h}}
 $$
-Ainsi, il est nécessaire d'approximer les paramètres de volatilité et de taux de rendement sans risque. À l'aide des données mensuelles historiques retrouvées dans le chiffrier excel (équipe 21) il est possible de déterminer la volatilité historique du sous-jacent. 
+Ainsi, il est nécessaire d'approximer les paramètres de volatilité et de taux de rendement sans risque. À l'aide des données mensuelles historiques retrouvées dans le chiffrier excel (équipe 21), il est possible de déterminer la volatilité historique du sous-jacent. 
 
 Tout d'abord, l'équation suivante est employée pour déterminer les rendements logarithmiques pour chaque période de $h=\frac{1}{12}$ d'année.
 
@@ -78,14 +78,14 @@ $$
 r_{t,t+h} = ln\left(\frac{S_{t+h}}{S_t}\right) \qquad (1)
 $$
 
-Ensuite, l'utilisation de (1) est utilisée dans l'équation ci-dessous pour déterminer l'écart-type annuelle des données mensuelles historiques. Dans cette équation, il y a une division par $\sqrt{h}$ afin de s'assurer que la volatilité calculée soit sur base annuelle.
+Ensuite, l'utilisation de (1) est utilisée dans l'équation ci-dessous pour déterminer l'écart-type annuel des données mensuelles historiques. Dans cette équation, il y a une division par $\sqrt{h}$ afin de s'assurer que la volatilité calculée soit sur base annuelle.
 
 $$
 \frac{Stdev(ln(r_{t,t+h}))}{\sqrt{h}} = \hat\sigma 
 $$
 
 
-En utilisant les taux de rendement historiques sur les bons du trésor un 1 an du Canada. Nous avons utilisés les taux de rendement effectif annuel des 5 dernières années. Ces données sont disponibles pour chaque mois sur le site de la Banque du Canada. La formule suivante a été utilisée pour estimer la force d'interêt sans risque annuelle. 
+En utilisant les taux de rendement historiques sur les bons du trésor 1 an du Canada, nous avons déterminé les taux de rendement effectif annuel des 5 dernières années. Ces données sont disponibles pour chaque mois sur le site de la Banque du Canada. La formule suivante a été utilisée pour estimer la force d'interêt sans risque annuelle. 
 
 $$
 r_f = ln\left(1 + \sum_{i=0}^{n-1}\frac{r_{f,i}}{n}\right)
@@ -106,7 +106,7 @@ Les valeurs des paramètres qui seront utilisés pour l'évaluation de différen
 
 # Question 2
 
-Il était demandé de construire des arbres binomial d'échéance 6 mois et 2 ans avec 4 et 100 périodes, donc nous devrons construire 4 arbres au total. Nous devions utiliser ces arbres dans le but de ressortir plusieurs caractéristiques d'option de vente ($K=90$) et d'option d'achat ($K=120$).
+Il était demandé de construire des arbres binomiaux d'échéance 6 mois et 2 ans avec 4 et 100 périodes, donc nous devrons construire 4 arbres au total. Nous devions utiliser ces arbres dans le but de faire ressortir plusieurs caractéristiques d'option de vente ($K=90$) et d'option d'achat ($K=120$).
 
 À l'aide des formules développées à la question 1, il est possible de dériver les paramètres $u$ et $d$, représentant le facteur de hausse et de diminution du sous-jacent pendant la période de longueur $h$.
 
@@ -117,7 +117,7 @@ La probabilité d'un mouvement de prix du sous-jacent vers la branche supérieur
 $$
 p^{*}=\frac{e^{rh}-d}{u-d}
 $$
-Également, un autre point intéressant de l'évaluation d'option dans le modèle binomial est qu'il est possible de répliquer l'option à chaque noeuds de l'arbre. Cela se quantifie avec deux paramètres : $\Delta$ et $B$. Le paramètre $\Delta$ indique la quantité d'actions à acheter/vendre et le paramètre $B$ indique le montant à emprunter/prêter. Il est à noter qu'il est possible d'acheter des fractions d'actions.
+Également, un autre point intéressant de l'évaluation d'option dans le modèle binomial est qu'il est possible de répliquer l'option à chaque noeud de l'arbre. Cela se quantifie avec deux paramètres : $\Delta$ et $B$. Le paramètre $\Delta$ indique la quantité d'actions à acheter/vendre et le paramètre $B$ indique le montant à emprunter/prêter. Il est à noter que ce modèle suppose qu'il est possible d'acheter des fractions d'actions.
 $$
 \Delta=\frac{\theta_u-\theta_d}{S(u-d)} \qquad (2)
 $$
@@ -125,7 +125,7 @@ $$
 $$
 B=e^{-rh}\frac{u*\theta_d - d*\theta_u}{u-d}  \qquad (3)
 $$
-Ces formules sont dérivées de ces équations, en déterminant les deux inconnus avec les deux équations
+Ces formules sont dérivées en isolant les deux inconnues dans les deux équations suivantes:
 
 $$
 \theta_u = \Delta\times U + B \times e^{-rt}
@@ -133,27 +133,24 @@ $$
 $$
 \theta_d = \Delta\times D + B \times e^{-rt}
 $$
-où U et D représentent respectivement $S\times u$ et $S\times d$
+où U et D représentent respectivement $S\times u$ et $S\times d$.
 
-Pour la mesure $\Delta$, $\theta_u$ représente la valeur à l'échance de l'option pour le prochain embranchement supérieur, tandis que $\theta_d$ repésente la valeur à l'échéance de l'option pour le prochain embranchement inférieur. Au dénominateur se retrouve la différence entre les paramètre de l'embrachement supérieur et l'embranchement inférieur que peut prendre le sous-jacent lors de la prochaine période. C'est donc un ratio entre les différentes valeurs à l'échéance de l'option par rapport à l'écart du sous-jacent selon l'embranchement. Donc pour chaque variation de 1 du sous-jacent, il y aurait une variation de $\Delta$ de la valeur à l'échéance de l'option
+Pour la mesure $\Delta$, $\theta_u$ représente la valeur à l'échance de l'option pour le prochain embranchement supérieur, tandis que $\theta_d$ repésente la valeur à l'échéance de l'option pour le prochain embranchement inférieur. Au dénominateur se retrouve la différence entre les paramètres de l'embrachement supérieur et l'embranchement inférieur que peut prendre le sous-jacent lors de la prochaine période. C'est donc un ratio entre les différentes valeurs à l'échéance de l'option par rapport à l'écart du sous-jacent selon l'embranchement. Donc, pour chaque variation de 1 de la valeur du sous-jacent, il y aurait une variation de $\Delta$ de la valeur de l'option.
 
-Quant au montant à emprunter ou à prêter, il représente le gain ou le montant à emprunter pour pouvoir avoir une position longue ou courte dans un option donné.
+Quant au montant à emprunter ou à prêter, il représente le gain ou le montant à emprunter pour pouvoir avoir une position longue ou courte dans un option donnée.
 
-Il est observer que pour un propriétaire d'une option d'achat, le $\Delta$ sera toujours $\geq$ 0 et le B sera toujours $\leq$ 0, tandis que pour un propriétaire d'une option de vendre, le $\Delta$ sera toujours $\leq$ 0 et le B sera toujours $\geq$ 0.
+Il est observé que pour un propriétaire d'une option d'achat, le $\Delta$ sera toujours $\geq$ 0 et le B sera toujours $\leq$ 0, tandis que pour un propriétaire d'une option de vendre, le $\Delta$ sera toujours $\leq$ 0 et le B sera toujours $\geq$ 0.
 
-Une fois ces paramètres déterminés, on peut répliquer la valeur à l'échéance de l'option en achetant ou en vendant une partie du sous-jacent correspondant au $\Delta$ et en empruntant ou en prêtant B
+Une fois ces paramètres déterminés, on peut répliquer la valeur à l'échéance de l'option en achetant ou en vendant une partie du sous-jacent correspondant au $\Delta$ et en empruntant ou en prêtant B:
 
 $$
 \theta = \Delta\times S + B = e^{-rh}(p^*\theta_u+(1-p^*)\theta_d)
 $$
-Où $\theta$ est la valeur de l'option à un noeuds quelconque.
+Où $\theta$ est la valeur de l'option à un noeud quelconque.
 
-Pour démontrer la valeur de nos paramètres réplicatifs, l'exemple du calcul sera effectué pour l'option d'achat à troisième période à l'embranchement suppérieur, 
+Pour démontrer la valeur de nos paramètres réplicatifs pour une option d'achat, un exemple de calcul sera effectué pour l'option d'achat à l'embranchement supérieur de la troisième période.
 
-
-L'équation (2) sera utilisée pour déterminer le $\Delta_{uuu}$ 
-
-$\theta$ sera remplacé par $C$ pour représenter un option d'achat (Call) 
+L'équation (2) sera utilisée pour déterminer le $\Delta_{uuu}$. $\theta$ sera remplacé par $C$ pour représenter un option d'achat (Call).
 
 $$
 \Delta=\frac{C_u-C_d}{S(u-d)}
@@ -188,36 +185,33 @@ $$
 \Delta= 0.61
 $$
 
-et à l'aide de l'équation (3)
+Et, à l'aide de l'équation (3):
 
 $$
 B=e^{-rh}\frac{u*C_d - d*C_u}{u-d}
 $$
 
-En utilisant les paramètres trouvés à la Question#1 et les valeur de $C_d$ et $C_u$, on observe que 
+En utilisant les paramètres trouvés à la Question 1 et les valeurs de $C_d$ et $C_u$, on observe que 
 
 $$
 B = -69.64
 $$
 
+Donc, étant donné que le delta est positif, pour répliquer l'option d'achat, il faut avoir une position longue dans le sous-jacent. Pour y arriver, il faut emprunter une valeur de B$\$$ au taux sans risque.
 
-Donc étant donné que le delta est positif, pour répliquer l'option d'achat, il faut avoir une position longue dans le sous-jacent. Pour y arriver, il faut emprunter une valeur de B$\$$ au taux sans risque.
+Les mêmes équations seront utilisées pour trouver les paramètres réplicatifs d'une option, mais pour l'option de vente. Reproduisons un exemple avec l'option de vente européenne avec échéance T = 0.5 au troisième noeud de l'avant-dernier embranchement ($\Delta_{ddu}$). 
 
-
-Les mêmes équations seront utilisées pour trouver les paramètres réplicatifs d'une option, mais pour l'option de vente.  En exemple, les paramètres de l'option de vente européenne avec échéance T = 0.5 seront calculés au troisième embranchement à l'avant dernier embranchement ($\Delta_{ddu}$) 
-
-Toujours avec l'équation, nous trouverons que $\Delta$ = -.12 et que B = 11.97. Car, $P_i$ (Put) =
+Toujours avec l'équation, nous trouverons que $\Delta = -0.12$ et que $B = 11.97$. Car, $P_i$ (Put) =
 
 $$
 P_i = max(K-I;0)
 $$
 
-$P_u$ = 0,
-$P_d$ = 1.4
+Ici, $P_u = 0$ et $P_d = 1.4$.
 
-On constate donc que le delta est négatif, cela s'explique par le fait qu'il y a moins de chance d'exercer l'option de vente si le prix du sous-jacent augmente, donc une augmentation du prix du sous-jacent résulte en une diminution de la valeur de l'option de vente. 
+On constate donc que le delta est négatif. Cela s'explique par le fait qu'il y a moins de chance d'exercer l'option de vente si le prix du sous-jacent augmente, donc une augmentation du prix du sous-jacent résulte en une diminution de la valeur de l'option de vente.
 
-Donc étant donné que le delta est négatif, pour répliquer l'option de vente, il faut donc se procurer une position courte dans le sous-jacent. Pour y arriver, il faut prêter un montant  B$\$$.
+Donc étant donné que le delta est négatif, pour répliquer l'option de vente, il faut donc se procurer une position courte dans le sous-jacent. Pour y arriver, il faut prêter un montant B$\$$ au taux sans risque.
 
 ##### Option d'achat : modèle à 4 périodes
 
@@ -228,15 +222,13 @@ call2 <- binomopt(s=100, k=120, v=sd, r=Rfree_est, tt=2, d=0, nstep=4, american=
                   returntrees=T)
 ```
 
-Les prochaines figures correspondes à des options d'achat et ont 4 périodes chacunes, mais avec des échéances de $T=0.5$ ou $T=2$ respectivement. 
-
-
+Les prochaines figures correspondent à des options d'achat et ont 4 périodes chacune, mais avec des échéances de $T=0.5$ ou $T=2$ respectivement. 
 
 ![](Call05.png)
 
 ![](Call2.png)
 
-On peut en déduire que plus le temps est grand avant la date d'échéance, plus les probabilités qu'il y ait une valeur à l'échéance non nulle d'une option achat sont grandes. C'est notament le cas en raison du taux sans risque plus grand que le taux de dividende ($r_f$ $\ge$ $\delta$), donc l'espérance de la hausse de prix du sous-jacent est positive au fil du temps. Les prix pour les options d'achat sont présentés dans le tableau suivant.
+On peut en déduire que plus le temps est grand avant la date d'échéance, plus les probabilités qu'il y ait une valeur à l'échéance non nulle d'une option achat sont grandes. C'est notamment le cas en raison du taux sans risque plus grand que le taux de dividende ($r_f > \delta$), donc l'espérance de la hausse de prix du sous-jacent est positive au fil du temps et est amplifiée lorsque $T$ augmente. Les prix pour les options d'achat sont présentés dans le tableau suivant.
 
 |Échéance|Prix |
 |:---:|:----:|
@@ -252,12 +244,13 @@ put2 <- binomopt(s=100, k=90, v=sd, r=Rfree_est, tt=2, d=0, nstep=4, american=F,
                   returntrees=T)
 ```
 
-Les prochaines figures correspondes à des options de vente et ont 4 périodes chacunes, mais avec des échéances de $T=0.5$ ou $T=2$ respectivement. 
+Les prochaines figures correspondent à des options de vente et ont 4 périodes chacune, mais avec des échéances de $T=0.5$ ou $T=2$ respectivement. 
 
 ![](put05.png)
+
 ![](put2.png)
 
-À l'invserse des options d'achat, on peut en déduire que plus le temps est grand avant la date d'échéance, plus les probabilités qu'il y ait une valeur à l'échéance non nulle d'une option achat sont petites. Les prix pour les options de vente sont présentés dans le tableau suivant. 
+À l'inverse des options d'achat, on peut en déduire que plus le temps est grand avant la date d'échéance, plus les probabilités qu'il y ait une valeur à l'échéance non nulle d'une option achat sont petites. En effet, comme $r_f > \delta$, la valeur du sous-jacent va en moyenne croître dans le temps, et cette croissance est de plus en plus grande avec le temps. La probabilité d'une décroissance de l'action est donc atténuée lorsque $T$ augmente. Les prix pour les options de vente sont présentés dans le tableau suivant. 
 
 |Échéance|Prix |
 |:---:|:----:|
@@ -277,13 +270,12 @@ call2 <- binomopt(s=100, k=120, v=sd, r=Rfree_est, tt=2, d=0, nstep=100, america
 prix_call2 = call2$price
 ```
 
-Maintenant, les mêmes caractérisques sont maintenues, mais au lieu de faire le modèle à 4 périodes, il y aura 100 périodes. Le prix des options se rapprochent de plus en plus du prix calculé à l'aide du modèle continue de *Black-Scholes* qui sera présenté plus loin dans le rapport. Le tableau ci-dessous présente les prix initiaux pour les options d'achat ainsi que la composition initiale du portefeuille réplicatif.
+Maintenant, les mêmes caractérisques sont maintenues, mais au lieu de faire le modèle à 4 périodes, il y aura 100 périodes. On pourra constater que le prix des options se rapprochera de plus en plus du prix calculé à l'aide du modèle continu de *Black-Scholes* qui sera présenté plus loin dans le rapport. Le tableau ci-dessous présente les prix initiaux pour les options d'achat ainsi que la composition initiale du portefeuille réplicatif.
 
 |Échéance|Prix |$\Delta_0$|$B_0$|
 |:---:|:----:|:----:|:----:|
 |6 mois|`r call05$price`\$|`r call05$deltatree[1,1]`|`r call05$bondtree[1,1]`\$|
 |2 ans|`r call2$price`\$|`r call2$deltatree[1,1]`|`r call2$bondtree[1,1]`\$|
-
 
 
 ![](hist_Call05.png)
@@ -294,11 +286,11 @@ Maintenant, les mêmes caractérisques sont maintenues, mais au lieu de faire le
 
 \newpage
 
-Concernant les valeurs à l'échance, les conclusions sont les mêmes que présentées précédement, il y a de plus en de valeur à l'échance non nulles quand le temps d'échéance augmente pour un option d'achat. En comparant, on peut observer que le prix initial de l'option d'achat à T = 0.5 est de `r prix_call05`\$ et que le prix initial de l'option d'achat à T = 2 est de `r prix_call2`\$. Donc, pour des options d'achat avec les mêmes paramètres, plus le temps d'ici l'échéance est grand, plus le prix de l'option sera élevé.
+Concernant les valeurs à l'échance, les conclusions sont les mêmes que présentées précédemment, il y a de plus en plus de valeurs à l'échance non nulles quand le temps d'échéance augmente pour un option d'achat. En comparant, on peut observer que le prix initial de l'option d'achat avec T = 0.5 est de `r prix_call05`\$ et que le prix initial de l'option d'achat avec T = 2 est de `r prix_call2`\$. Donc, pour des options d'achat, plus le temps d'ici l'échéance est grand, plus le prix de l'option sera élevé, \textit{ceteris paribus}.
 
-Il est également pertinent d'observer l'histogramme des deltas et des B au fil des périodes, plus les périodes défilent, plus il est possible de déterminer à l'avance si l'option sera exercée ou non. Pour illustrer ce fait, il sera établi, tout en conservant les paramètres précédents, que si à 25 périodes de l'échéance de l'option le prix du sous-jacent est de 90$\$$ et que le prix d'exercice est de 120$\$$, alors les probabilités d'exercer l'option sont très faibles, c'est pourquoi il y a une grande masse de deltas et de B situés près de 0, car l'option est réputée être "Out of the money". À l'inverse, si à la même période, le sous-jacent est de 160$\$$, l'option est réputée être "In the money" et aura de très fortes chances d'être exercées, cela explique donc pourquoi il y a un grande masse près de 1 pour les deltas et près de -120$\$$.
+Il est également pertinent d'observer l'histogramme des deltas et des B au fil des périodes. Plus les périodes défilent, plus il est possible de déterminer à l'avance si l'option sera exercée ou non. Pour illustrer ce fait, il sera établi, tout en conservant les paramètres précédents, que si à 25 périodes de l'échéance de l'option le prix du sous-jacent est de 90$\$$ et que le prix d'exercice est de 120$\$$, alors les probabilités d'exercer l'option sont très faibles, c'est pourquoi il y a une grande masse de deltas et de B situés près de 0, car l'option est réputée être "out of the money". À l'inverse, si à la même période, le sous-jacent est de 160$\$$, l'option est réputée être "in the money" et aura de très fortes chances d'être exercée, cela explique donc pourquoi il y a une grande masse près de 1 pour les deltas et près de -120$\$$ pour les B.
 
-Cependant, à la période 25, si le prix du sous-jacent est de 120$, l'option sera réputée "At the money", c'est donc pourquoi il y a également des masses près de 0.5 pour les deltas et croissant à partir de 20 pour les B. Car les scénarios où l'option soit exercée ou non sont tous les deux probables d'ici l'échéance.
+Cependant, à la période 25, si le prix du sous-jacent est de 120$, l'option sera réputée "at the money", c'est donc pourquoi il y a également des masses près de 0.5 pour les deltas et croissant à partir de 20 pour les B. En effet, les deux scénarios possibles (l'option est exercée ou non) sont tous les deux probables d'ici l'échéance, ce qui rajoute plus d'incertitude.
 
 
 ##### Option de vente : modèle à 100 périodes
@@ -317,15 +309,12 @@ prix_put2 = put2$price
 
 ```
 
-Le tableau ci-dessous présente les prix initiaux pour les options de vente pour le modèle à 100 périodes. Comme pour les options d'achat, il sera démontré plus loin à la question 5 que le prix d'une option de vente dans un modèle binomial à 100 périodes tend vers le prix prédit par le modèle *Black-Scholes*. De plus, la composition initiale du portefeuille réplicatif est présentée.
+Le tableau ci-dessous présente les prix initiaux pour les options de vente pour le modèle à 100 périodes. Comme pour les options d'achat, il sera démontré plus loin à la question 5 que le prix d'une option de vente dans un modèle binomial à 100 périodes tend vers le prix prédit par le modèle *Black-Scholes*. La composition initiale du portefeuille réplicatif est également présentée.
 
 |Échéance|Prix |$\Delta_0$|$B_0$|
 |:---:|:----:|:----:|:----:|
 |6 mois|`r put05$price`\$|`r put05$deltatree[1,1]`|`r put05$bondtree[1,1]`\$|
 |2 ans|`r put2$price`\$|`r put2$deltatree[1,1]`|`r put2$bondtree[1,1]`\$|
-
-
-
 
 ![](hist_put05.png)
 
@@ -336,9 +325,9 @@ Le tableau ci-dessous présente les prix initiaux pour les options de vente pour
 \newpage
 
 
-Concernant les valeurs à l'échance, les conclusions sont les mêmes que présentées précédement pour les options de ventes, il y a de moins en de moins de valeur à l'échance non nulles quand le temps d'échéance augmente pour une option de vente. On observe que le prix initial de l'option de vente à T = 0.5 est de `r prix_put05`\$ et le prix initial de l'option de vente à T = 2 est de `r prix_put2`\$. Donc, pour des options d'achat de même paramètres, moins le temps d'ici l'échéance est grand, plus la valeur de l'option sera grande.
+Concernant les valeurs à l'échance, les conclusions sont les mêmes que présentées précédemment pour les options d'achat: il y a de moins en moins de valeurs à l'échance non nulles quand le temps d'échéance augmente pour une option de vente. On observe que le prix initial de l'option de vente à T = 0.5 est de `r prix_put05`\$ et le prix initial de l'option de vente à T = 2 est de `r prix_put2`\$. Donc, pour des options de vente, plus le temps d'ici l'échéance est grand, plus la valeur de l'option sera grande, \textit{ceteris paribus}.
 
-Le constat est semblable à celui des options d'achats, mais avec des paramètres réplicatifs inversés. donc les deltas tendent vers 0 ou -1 plus les périodes avancent, et le paramètres B tend vers 0 ou 80$\$$.
+Le constat est semblable à celui des options d'achats, mais avec des paramètres réplicatifs inversés. Donc, les deltas tendent de plus en plus vers 0 ou -1 plus les périodes avancent, et le paramètre B tend de plus en plus vers 0 ou 80$\$$. L'explication est similaire à celle déjà faite pour les options d'achat, soit que le statut "out of the money" ou "in the money" de l'option est de plus en plus certain avec le temps qui se rapproche de l'échéance.
 
 \newpage
 
