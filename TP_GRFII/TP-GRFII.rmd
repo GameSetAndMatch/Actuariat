@@ -106,7 +106,7 @@ Les valeurs des paramètres qui seront utilisés pour l'évaluation de différen
 
 # Question 2
 
-Il était demandé de construire des arbres binomiaux d'échéance 6 mois et 2 ans avec 4 et 100 périodes, donc nous devrons construire 4 arbres au total. Nous devions utiliser ces arbres dans le but de faire ressortir plusieurs caractéristiques d'option de vente ($K=90$) et d'option d'achat ($K=120$).
+Il était demandé de construire des arbres binomiaux d'échéance 6 mois et 2 ans avec 4 et 100 périodes, donc nous devrons construire 4 arbres au total. Nous devions utiliser ces arbres dans le but de faire ressortir plusieurs caractéristiques d'option de vente ($K=90$) et d'option d'achat ($K=120$). Les options ont été évaluées sur un sous-jacent dont le prix initial était de 100\$ ($S_0=100\$$).
 
 À l'aide des formules développées à la question 1, il est possible de dériver les paramètres $u$ et $d$, représentant le facteur de hausse et de diminution du sous-jacent pendant la période de longueur $h$.
 
