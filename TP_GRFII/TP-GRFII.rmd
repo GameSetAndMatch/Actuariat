@@ -475,7 +475,7 @@ put2 <- binomopt(s=100, k=90, v=sd, r=Rfree_est, tt=2, d=0, nstep=4, american=T,
                  returntrees=T)
 ```
 
-Commençons par les résultats liés à l'arbre binomial de 4 périodes. Tout d'abord, voici ci-haut l'arbre binomial en question, avec les composantes du portefeuille réplicatif à chaque branche:
+Commençons par les résultats liés à l'arbre binomial de 4 périodes. Tout d'abord, voici ci-haut l'arbre binomial en question, avec les composantes du portefeuille réplicatif à chaque branche.
 
 ```{r pressure, echo=FALSE, fig.cap="Arbre binomial d'une option de vente américaine (2 ans, 4 périodes)", out.width = '100%'}
 knitr::include_graphics("CallAmer2.png")
@@ -556,6 +556,8 @@ par(mfrow = c(1, 1))
 
 Comme il a déjà été remarqué pour l'option de vente américaine 4 périodes, les $B$ tendent à être plus grands que pour l'option européenne correspondante. L'explication de ce phénomène a été faite plus tôt.
 
+Pour ce qui est des histogrammes des $\Delta$ et des $B$, on peut aussi faire les mêmes observations que celles du numéro 2, soit que plus l'échéance approche, plus le statut "in the money" ou "out of the money" de l'option est clair, et donc plus les composantes du portefeuille réplicatif tendent vers certains montants déterminés d'avance.
+
 Maintenant, voici le graphique du prix de l'option de vente américaine selon son prix d'exercice résultant d'un arbre binomial à 100 périodes:
 
 ```{r, echo=FALSE, warning=FALSE, eval = TRUE}
@@ -595,7 +597,7 @@ C2 <- greeks2(bscall, list(s=100, k=120, v=sd, r=Rfree_est, tt=2, d=0))
 
 ```
 
-À l'aide du modèle de tarification d'option *Black-Scholes*, nous devions trouver le prix de quatre options européennes. Il s'agit de deux options de vente à échéance 6 mois et 2 ans ainsi que de deux option d'achat à échéance 6 mois et 2 ans. Pour les options de vente, le prix d'exercice est de 90\$ et pour les option d'achat, le prix d'exercice est de 120\$. Les formules de *Black-Scholes* permettant la tarification des options d'achat (*call*) et de ventes (*Put*) sont respectivement les suivantes :
+À l'aide du modèle de tarification d'option *Black-Scholes*, nous devions trouver le prix de quatre options européennes. Il s'agit de deux options de vente à échéance 6 mois et 2 ans ainsi que de deux options d'achat à échéance 6 mois et 2 ans. Pour les options de vente, le prix d'exercice est de 90\$ et pour les options d'achat, le prix d'exercice est de 120\$. Les formules de *Black-Scholes* permettant la tarification des options d'achat (*call*) et de vente (*Put*) sont respectivement les suivantes:
 
 $$
 C(S, K, \sigma, r, T, \delta)=Se^{-\delta T}N(d_1)-Ke^{-rT}N(d_2)
@@ -613,19 +615,19 @@ $$
 $$
 N(x) = P(Z\leq x), \quad Z \sim N(\mu = 0, \sigma = 1)
 $$
-Les caractéristiques du sous-jacent permettant d'évaluer le prix selon la méthode *Black-Scholes* sont présentées dans le tableau ci-dessous. La volatilité et la force d'intérêt sans risque ont été estimés à la question 1 à l'aide de données historiques. Les autres paramètres sont mentionnées dans l'énoncé ou proviennent d'hypothèse que nous avons pris.
+Les caractéristiques du sous-jacent permettant d'évaluer le prix selon la méthode *Black-Scholes* sont présentées dans le tableau ci-dessous. La volatilité et la force d'intérêt sans risque ont été estimées à la question 1 à l'aide de données historiques. Les autres paramètres sont mentionnés dans l'énoncé ou proviennent d'hypothèses que nous avons prises.
 \newline
 \begin{itemize}
     \item Les hypothèses de la formule de \textit{Black-Scholes} sur la distribution du sous-jacent sont les suivantes:
         \begin{enumerate}
              \item Les forces d'interêt observées sur plusieurs périodes sont distribuées normalement et sont indépendantes. Il n'y a pas de mouvements soudain du prix du sous-jacent.
             \item La volatilité est connue et constante dans le temps.
-            \item Les dividendes futures sont connues.
-            \item Un titre peut être divisé en fraction.
+            \item Les dividendes futurs sont connus.
+            \item Un titre peut être divisé en fractions.
         \end{enumerate}
 \end{itemize}
 \begin{itemize}
-    \item Les hypothèses du modèle sur l'environnement économique sont les suivantes :
+    \item Les hypothèses du modèle sur l'environnement économique sont les suivantes:
         \begin{enumerate}
              \item La force d'interêt sans risque est connue et constante dans le temps.
              \item Il n'y a pas d'impôts et de frais de transactions.
@@ -634,8 +636,6 @@ Les caractéristiques du sous-jacent permettant d'évaluer le prix selon la mét
         \end{enumerate}
 \end{itemize}
 Les paramètres du sous-jacent utilisés pour évaluer le prix des options sont présentés dans le tableau ci-dessous.
-
-
 
 | Paramètres | Symboles | Valeurs |
 |:----------|:--------:|:---------:|
@@ -647,10 +647,7 @@ Les paramètres du sous-jacent utilisés pour évaluer le prix des options sont 
 | Taux de dividendes  |     $\delta$     |   0     |
 \begin{center} \textbf{Paramètres du sous-jacent} \end{center}
 
-
-
 En appliquant les paramètres du sous-jacent aux formules de *Black-Scholes*, il est possible d'évaluer la valeurs des quatre options demandées. Ces prix ont été calculés à l'aide des fonctions `bscall` et `bsput` du package *derivmkts* en R. Les prix de ces options sont présentés dans le tableau ci-dessous.
- 
 
 |  | Option de vente | Option d'achat |
 |:---|:--------------:|:----:|
@@ -660,7 +657,7 @@ En appliquant les paramètres du sous-jacent aux formules de *Black-Scholes*, il
 \textbf{Prix des options de vente et d'achat selon la formule Black-scholes}
 \end{center}
 
-À la lumière des résultats présentés dans le tableau ci-dessus, il est possible de comparer avec les résultats obtenus à la question 2 où les options étaient tarifées à l'aide d'un arbre binomial. On peut observer que les prix des options évaluées avec le modèle binomial à 4 périodes sont sensiblement différents de ceux du modèle *Black-Scholes*. Pour ce qui est du modèle binomial à 100 périodes, les prix sont très similaires à ceux obtenus à l'aide du modèle *Black-Scholes*. Cela n'est pas surprenant puisque le modèle *Black-Scholes* peut être vu comme un modèle binomial dont le nombre de période tend vers l'infini. Un arbre binomial à 100 périodes sur une période de temps aussi petite, c'est-à-dire 6 mois et 2 ans, représente ainsi une approximation adéquate du modèle continu de *Black-Scholes*.
+À la lumière des résultats présentés dans le tableau ci-dessus, il est possible de comparer avec les résultats obtenus à la question 2 où les options étaient tarifées à l'aide d'un arbre binomial. On peut observer que les prix des options évaluées avec le modèle binomial à 4 périodes sont sensiblement différents de ceux du modèle *Black-Scholes*. Pour ce qui est du modèle binomial à 100 périodes, les prix sont très similaires à ceux obtenus à l'aide du modèle *Black-Scholes*. Cela n'est pas surprenant puisque le modèle *Black-Scholes* peut être vu comme un modèle binomial dont le nombre de périodes tend vers l'infini. Un arbre binomial à 100 périodes sur une période de temps aussi petite, c'est-à-dire 6 mois ou 2 ans, représente ainsi une approximation adéquate du modèle continu de *Black-Scholes*.
 
 \newpage
 
@@ -668,9 +665,9 @@ En appliquant les paramètres du sous-jacent aux formules de *Black-Scholes*, il
 # Question 6
 ##### *Greeks*
 
-Il est souvent nécessaire de s'intéresser à la sensibilité du prix d'une option par rapport à ses différents paramètres afin de mieux connaitre le risque associé à l'option. Les paramètres du modèle *Black-Scholes* qui seront utilisés sont le prix initial ($S$), la volatilité ($\sigma$), la force d'intérêt sans risque ($r$), le temps à l'échéance ($T$) ainsi que le taux de dividendes ($\delta$). Les grecs permettent de mesurer cette sensibilité en calculant les dérivées partielles par rapport aux paramètres énumérés ci-dessus. Un sixième grec, permet de quantifier la sensibilité d'un grec par rapport au prix initial ($S$) et est une mesure de la convexité du prix de l'option. Les grecs sont calculées en supposant que les hypothèses du modèle *Black-Scholes* tiennent. Les 6 grecs et leurs dérivations sont présentés ci-dessous. 
+Il est souvent nécessaire de s'intéresser à la sensibilité du prix d'une option par rapport à ses différents paramètres afin de mieux connaitre le risque associé à l'option. Les paramètres du modèle *Black-Scholes* qui seront utilisés sont le prix initial ($S$), la volatilité ($\sigma$), la force d'intérêt sans risque ($r$), le temps à l'échéance ($T$) ainsi que le taux de dividendes ($\delta$). Les grecs permettent de mesurer cette sensibilité en calculant les dérivées partielles par rapport aux paramètres énumérés ci-dessus. Un sixième grec, le $\Gamma$, permet de quantifier la sensibilité d'un grec par rapport au prix initial ($S$) et est une mesure de la convexité du prix de l'option. Les grecs sont calculés en supposant que les hypothèses du modèle *Black-Scholes* tiennent. Les 6 grecs et leurs dérivations sont présentés ci-dessous. 
 \newline
-Avant de débuter posons ces deux équations pour simplifier les notations.
+Avant de débuter, posons ces deux équations pour simplifier les notations.
 $$
 C=C(S, K, \sigma, r, T, \delta)=Se^{-\delta T}N(d_1)-Ke^{-rT}N(d_2)
 $$
@@ -694,12 +691,12 @@ $$
 \Gamma_{Call}=\Gamma_{Put}=\frac{\partial \Delta}{\partial S}=\frac{\partial^2 V}{\partial^2 S}=\frac{e^{-\delta T}N'(d_1)}{S \sigma \sqrt{T}}>0, \quad\text{toujours positif}
 $$
     \item \textbf{Vega ($v$)}
-\newline Ce grec mesure la sensitivité du prix de l'option par rapport à la volatilité du sous-jacent. Il est mesuré en point de pourcentage, ce qui le rend plus simple à analyser. Vega représente l'augmentation du prix de l'option lorsque la volatilité du sous-jacent ($\sigma$) augmente de 1\%. Il se calcule de la manière suivante:
+\newline Ce grec mesure la sensitivité du prix de l'option par rapport à la volatilité du sous-jacent. Il est mesuré en points de pourcentage, ce qui le rend plus simple à analyser. Vega représente l'augmentation du prix de l'option lorsque la volatilité du sous-jacent ($\sigma$) augmente de 1\%. Il se calcule de la manière suivante:
 $$
 \nu_{Call}=\nu_{Put}=\frac{\partial V}{\partial \sigma}/100=\frac{Se^{-\delta T}N'(d_1)\sqrt{T}}{100}>0, \quad\text{toujours positif}
 $$
     \item \textbf{Rho ($\rho$)}
-\newline Ce grec mesure la sensitivité du prix de l'option par rapport à la force d'interêt sans risque du marché.  Il est mesuré en point de pourcentage, ce qui le rend plus simple à analyser. Rho représente l'augmentation du prix de l'option lorsque la force d'interêt sans risque ($r$) augmente de 1\%. Il se calcule de la manière suivante:
+\newline Ce grec mesure la sensitivité du prix de l'option par rapport à la force d'interêt sans risque du marché.  Il est mesuré en points de pourcentage, ce qui le rend plus simple à analyser. Rho représente l'augmentation du prix de l'option lorsque la force d'interêt sans risque ($r$) augmente de 1\%. Il se calcule de la manière suivante:
 $$
 \rho_{Call}=\frac{\partial V}{\partial r}/100=\frac{\partial C}{\partial r}/100=\frac{TKe^{-rT}N(d_2)}{100}>0, \quad\text{toujours positif}
 $$
@@ -715,7 +712,7 @@ $$
 \Theta_{Put}=-\left[\frac{\partial V}{\partial T}\right]/365=-\left[\frac{\partial P}{\partial T}\right]/365=\Theta_{Call}+\frac{rKe^{-rT}-\delta Se^{-\delta T}}{365}
 $$
     \item \textbf{Psi ($\psi$)}
-\newline Ce grec mesure la sensitivité du prix de l'option par rapport au taux de dividendes continu. Il est mesuré en point de pourcentage, ce qui le rend plus simple à analyser. Psi représente l'augmentation du prix de l'option lorsque le taux de dividendes continu augmente de 1\%. Il se calcule de la manière suivante:
+\newline Ce grec mesure la sensitivité du prix de l'option par rapport au taux de dividendes continu. Il est mesuré en points de pourcentage, ce qui le rend plus simple à analyser. Psi représente l'augmentation du prix de l'option lorsque le taux de dividendes continu augmente de 1\%. Il se calcule de la manière suivante:
 $$
 \Psi_{Call}=\frac{\partial V}{\partial \delta}/100=\frac{\partial C}{\partial \delta}/100=\frac{-TSe^{-\delta T}N(d_1)}{100}<0,\quad\text{toujours négatif}
 $$
