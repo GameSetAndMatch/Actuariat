@@ -135,11 +135,7 @@ $$
 $$
 où U et D représentent respectivement $S\times u$ et $S\times d$.
 
-Pour la mesure $\Delta$, $\theta_u$ représente la valeur à l'échance de l'option pour le prochain embranchement supérieur, tandis que $\theta_d$ repésente la valeur à l'échéance de l'option pour le prochain embranchement inférieur. Au dénominateur se retrouve la différence entre les paramètres de l'embrachement supérieur et l'embranchement inférieur que peut prendre le sous-jacent lors de la prochaine période. C'est donc un ratio entre les différentes valeurs à l'échéance de l'option par rapport à l'écart du sous-jacent selon l'embranchement. Donc, pour chaque variation de 1 de la valeur du sous-jacent, il y aurait une variation de $\Delta$ de la valeur de l'option.
-
-Quant au montant à emprunter ou à prêter, il représente le gain ou le montant à emprunter pour pouvoir avoir une position longue ou courte dans un option donnée.
-
-Il est observé que pour un propriétaire d'une option d'achat, le $\Delta$ sera toujours $\geq$ 0 et le B sera toujours $\leq$ 0, tandis que pour un propriétaire d'une option de vendre, le $\Delta$ sera toujours $\leq$ 0 et le B sera toujours $\geq$ 0.
+Pour la mesure $\Delta$, $\theta_u$ représente la valeur à l'échance de l'option pour le prochain embranchement supérieur, tandis que $\theta_d$ repésente la valeur à l'échéance de l'option pour le prochain embranchement inférieur. Au dénominateur se retrouve la différence entre les paramètres de l'embrachement supérieur et l'embranchement inférieur que peut prendre le sous-jacent lors de la prochaine période. C'est donc un ratio entre les différentes valeurs à l'échéance de l'option par rapport à l'écart du sous-jacent selon l'embranchement. Donc, pour chaque variation de 1 de la valeur du sous-jacent, il y aurait une variation de $\Delta$ de la valeur de l'option. Quant au montant à emprunter ou à prêter, il représente le gain ou le montant à emprunter pour pouvoir avoir une position longue ou courte dans un option donnée. Il est observé que pour un propriétaire d'une option d'achat, le $\Delta$ sera toujours $\geq$ 0 et le B sera toujours $\leq$ 0, tandis que pour un propriétaire d'une option de vendre, le $\Delta$ sera toujours $\leq$ 0 et le B sera toujours $\geq$ 0.
 
 Une fois ces paramètres déterminés, on peut répliquer la valeur à l'échéance de l'option en achetant ou en vendant une partie du sous-jacent correspondant au $\Delta$ et en empruntant ou en prêtant B:
 
